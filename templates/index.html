@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Real Estate Value Estimator</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "DM Sans", sans-serif;
+            background: #f4f6f8;
+            color: #1d2939;
+        }
+
+
+        /* ================= HERO ================= */
+
+        .hero {
+            background: linear-gradient(
+                135deg,
+                rgba(15, 45, 46, 0.96),
+                rgba(28, 71, 72, 0.90)
+            );
+
+            color: white;
+            padding: 45px 8% 65px;
+        }
+
+        .hero p {
+            margin: 0 0 10px;
+            color: #c9a86a;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-family: "Playfair Display", serif;
+            font-size: clamp(32px, 5vw, 52px);
+            font-weight: 700;
+        }
+
+        .hero-description {
+            max-width: 650px;
+            margin-top: 15px !important;
+            color: #d8e0df !important;
+            text-transform: none !important;
+            letter-spacing: 0 !important;
+            font-size: 15px !important;
+            line-height: 1.6;
+            font-weight: 400 !important;
+        }
+
+
+        /* ================= MAIN ================= */
+
+        .container {
+            width: min(1200px, 90%);
+            margin: -25px auto 50px;
+        }
+
+        .main {
+            display: grid;
+            grid-template-columns: 1.7fr 0.9fr;
+            gap: 25px;
+            align-items: start;
+        }
+
+
+        /* ================= PROPERTY DETAILS FORM ================= */
+
+        .form-box {
+            background: #f3e1d8;
+            border-radius: 18px;
+            padding: 35px;
+            box-shadow: 0 10px 35px rgba(15, 45, 46, 0.12);
+            border: 1px solid #e2c7ba;
+        }
+
+        .form-header {
+            margin-bottom: 30px;
+        }
+
+        .form-header h2 {
+            margin: 0 0 8px;
+            font-size: 24px;
+            color: #0f2d2e;
+        }
+
+        .form-header p {
+            margin: 0;
+            color: #735f59;
+            font-size: 14px;
+        }
+
+        .section {
+            margin-bottom: 35px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #dfc9bf;
+        }
+
+        .section:last-of-type {
+            border-bottom: none;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            font-size: 15px;
+            color: #0f2d2e;
+        }
+
+        .section-number {
+            width: 35px;
+            height: 35px;
+            background: #e7cfc2;
+            color: #6d473b;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .fields {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #4e4542;
+        }
+
+        input,
+        select {
+            width: 100%;
+            height: 48px;
+            padding: 0 14px;
+            border: 1px solid #d6bbb0;
+            border-radius: 10px;
+            background: #fffaf7;
+            color: #1d2939;
+            font-family: inherit;
+            font-size: 14px;
+            transition: 0.2s ease;
+        }
+
+        input::placeholder {
+            color: #9a8b85;
+        }
+
+        input:hover,
+        select:hover {
+            border-color: #b88977;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #c9a86a;
+            box-shadow: 0 0 0 4px rgba(201, 168, 106, 0.18);
+        }
+
+        input[type="date"] {
+            color-scheme: light;
+        }
+
+
+        /* ================= BUTTON ================= */
+
+        button {
+            width: 100%;
+            height: 55px;
+            border: none;
+            border-radius: 12px;
+            background: #0f2d2e;
+            color: white;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: 0.25s ease;
+        }
+
+        button:hover {
+            background: #1c4748;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(15, 45, 46, 0.2);
+        }
+
+
+        /* ================= RESULT BOX ================= */
+
+        .result-box {
+            position: sticky;
+            top: 25px;
+            background: #0f2d2e;
+            color: white;
+            border-radius: 18px;
+            padding: 30px;
+            overflow: hidden;
+            box-shadow: 0 12px 35px rgba(15, 45, 46, 0.2);
+        }
+
+        .result-box::before {
+            content: "";
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: rgba(201, 168, 106, 0.12);
+            top: -100px;
+            right: -80px;
+        }
+
+        .result-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .result-label {
+            color: #c9a86a;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .result-box h2 {
+            margin: 12px 0 8px;
+            font-family: "Playfair Display", serif;
+            font-size: 28px;
+        }
+
+        .result-description {
+            color: #b8c6c5;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .price {
+            margin-top: 25px;
+            padding: 25px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            color: #e5c486;
+            font-size: clamp(32px, 4vw, 42px);
+            font-weight: 700;
+            word-break: break-word;
+        }
+
+        .waiting {
+            background: rgba(255, 255, 255, 0.07);
+            border-radius: 12px;
+            padding: 18px;
+            color: #d8e0df;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .waiting b {
+            color: #e5c486;
+        }
+
+        .model-info {
+            margin-top: 25px;
+            display: grid;
+            gap: 12px;
+        }
+
+        .model-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #b8c6c5;
+        }
+
+        .model-item strong {
+            color: white;
+            font-weight: 600;
+        }
+
+
+        /* ================= FOOTER ================= */
+
+        footer {
+            width: min(1200px, 90%);
+            margin: 0 auto 30px;
+            padding: 25px 0;
+            border-top: 1px solid #d0d5dd;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            color: #667085;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        footer b {
+            color: #344054;
+        }
+
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 900px) {
+
+            .main {
+                grid-template-columns: 1fr;
+            }
+
+            .result-box {
+                position: relative;
+                top: 0;
+            }
+
+        }
+
+        @media (max-width: 650px) {
+
+            .hero {
+                padding: 40px 5% 60px;
+            }
+
+            .container {
+                width: 92%;
+                margin-top: -15px;
+            }
+
+            .form-box {
+                padding: 22px;
+                border-radius: 14px;
+            }
+
+            .fields {
+                grid-template-columns: 1fr;
+            }
+
+            footer {
+                grid-template-columns: 1fr;
+                text-align: left;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- ================= HERO ================= -->
+
+    <section class="hero">
+
+        <p>King Country Real Estate Intelligence</p>
+
+        <h1>Discover Your Property's Value</h1>
+
+        <p class="hero-description">
+            Enter your property details and get an estimated market value
+            using our real estate prediction model.
+        </p>
+
+    </section>
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+
+    <div class="container">
+
+        <div class="main">
+
+
+            <!-- ================= FORM ================= -->
+
+            <div class="form-box">
+
+                <div class="form-header">
+
+                    <h2>Property Details</h2>
+
+                    <p>
+                        Provide accurate information for a better estimate.
+                    </p>
+
+                </div>
+
+
+                <form action="/predict" method="POST">
+
+
+                    <!-- ================= 01 SALE INFORMATION ================= -->
+
+                    <div class="section">
+
+                        <div class="section-title">
+
+                            <span class="section-number">01</span>
+
+                            Sale Information
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>Date of Sale</label>
+
+                            <!-- Must be the first value for your backend -->
+
+                            <input
+                                type="date"
+                                name="date"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ================= 02 PROPERTY LAYOUT ================= -->
+
+                    <div class="section">
+
+                        <div class="section-title">
+
+                            <span class="section-number">02</span>
+
+                            Property Layout
+
+                        </div>
+
+
+                        <div class="fields">
+
+
+                            <div class="field">
+
+                                <label>Bedrooms</label>
+
+                                <input
+                                    type="number"
+                                    min="0"
+                                    name="bedrooms"
+                                    placeholder="e.g. 3"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label>Bathrooms</label>
+
+                                <input
+                                    type="number"
+                                    min="0"
+                                    step="1"
+                                    name="bathrooms"
+                                    placeholder="e.g. 2"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label>Living Area (sqft)</label>
+
+                                <input
+                                    type="number"
+                                    min="0"
+                                    name="sqft_living"
+                                    placeholder="e.g. 1800"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label>Lot Size (sqft)</label>
+
+                                <input
+                                    type="number"
+                                    min="0"
+                                    name="sqft_lot"
+                                    placeholder="e.g. 5000"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label>Floors</label>
+
+                                <input
+                                    type="number"
+                                    min="0"
+                                    step="0.5"
+                                    name="floors"
+                                    placeholder="e.g. 1.5"
+                                    required
+                                >
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ================= 03 CONDITION & HISTORY ================= -->
+
+                    <div class="section">
+
+                        <div class="section-title">
+
+                            <span class="section-number">03</span>
+
+                            Condition & History
+
+                        </div>
+
+
+                        <div class="fields">
+
+
+                            <div class="field">
+
+                                <label>Waterfront</label>
+
+                                <select name="waterfront" required>
+
+                                    <option value="0">No</option>
+
+                                    <option value="1">Yes</option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label>View Rating (0-4)</label>
+
+                                <input
+                                    type="number"
+                                    min="0"
+                                    max="4"
+                                    name="view"
+                                    placeholder="e.g. 0"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label>Condition (1-5)</label>
+
+                                <input
+                                    type="number"
+                                    min="1"
+                                    max="5"
+                                    name="condition"
+                                    placeholder="e.g. 3"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label>Above Ground Area (sqft)</label>
+
+                                <input
+                                    type="number"
+                                    min="0"
+                                    name="sqft_above"
+                                    placeholder="e.g. 1800"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label>Basement Area (sqft)</label>
+
+                                <input
+                                    type="number"
+                                    min="0"
+                                    name="sqft_basement"
+                                    placeholder="e.g. 0"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label>Year Built</label>
+
+                                <input
+                                    type="number"
+                                    min="0"
+                                    name="yr_built"
+                                    placeholder="e.g. 1998"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label>Year Renovated</label>
+
+                                <input
+                                    type="number"
+                                    min="0"
+                                    name="yr_renovated"
+                                    placeholder="0 if never renovated"
+                                    required
+                                >
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ================= 04 LOCATION ================= -->
+
+                    <div class="section">
+
+                        <div class="section-title">
+
+                            <span class="section-number">04</span>
+
+                            Property Location
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>City</label>
+
+                            <select name="city" required>
+
+                                <option value="" disabled selected>
+                                    Select a city
+                                </option>
+
+                                <option value="0">Shoreline</option>
+                                <option value="1">Seattle</option>
+                                <option value="2">Kent</option>
+                                <option value="3">Bellevue</option>
+                                <option value="4">Redmond</option>
+                                <option value="5">Maple Valley</option>
+                                <option value="6">North Bend</option>
+                                <option value="7">Lake Forest Park</option>
+                                <option value="8">Sammamish</option>
+                                <option value="9">Auburn</option>
+                                <option value="10">Des Moines</option>
+                                <option value="11">Bothell</option>
+                                <option value="12">Federal Way</option>
+                                <option value="13">Kirkland</option>
+                                <option value="14">Issaquah</option>
+                                <option value="15">Woodinville</option>
+                                <option value="16">Normandy Park</option>
+                                <option value="17">Fall City</option>
+                                <option value="18">Renton</option>
+                                <option value="19">Carnation</option>
+                                <option value="20">Snoqualmie</option>
+                                <option value="21">Duvall</option>
+                                <option value="22">Burien</option>
+                                <option value="23">Covington</option>
+                                <option value="24">Inglewood-Finn Hill</option>
+                                <option value="25">Kenmore</option>
+                                <option value="26">Newcastle</option>
+                                <option value="27">Mercer Island</option>
+                                <option value="28">Black Diamond</option>
+                                <option value="29">Ravensdale</option>
+                                <option value="30">Clyde Hill</option>
+                                <option value="31">Algona</option>
+                                <option value="32">Skykomish</option>
+                                <option value="33">Tukwila</option>
+                                <option value="34">Vashon</option>
+                                <option value="35">Yarrow Point</option>
+                                <option value="36">SeaTac</option>
+                                <option value="37">Medina</option>
+                                <option value="38">Enumclaw</option>
+                                <option value="39">Snoqualmie Pass</option>
+                                <option value="40">Pacific</option>
+                                <option value="41">Beaux Arts Village</option>
+                                <option value="42">Preston</option>
+                                <option value="43">Milton</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ================= SUBMIT ================= -->
+
+                    <button type="submit">
+
+                        ESTIMATE PROPERTY VALUE →
+
+                    </button>
+
+
+                </form>
+
+            </div>
+
+
+            <!-- ================= RESULT ================= -->
+
+            <div class="result-box">
+
+                <div class="result-content">
+
+
+                    <div class="result-label">
+
+                        Property Appraisal
+
+                    </div>
+
+
+                    <h2>Estimated Value</h2>
+
+
+                    <p class="result-description">
+
+                        Your estimated property value will appear here
+                        after analysis.
+
+                    </p>
+
+
+                    {% if result is defined %}
+
+                        <div class="price">
+
+                            ${{ "{:,.2f}".format(result) }}
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="waiting">
+
+                            Enter the property details and click
+                            <b>Estimate Property Value</b>
+                            to generate your valuation.
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <div class="model-info">
+
+
+                        <div class="model-item">
+
+                            <span>Model</span>
+
+                            <strong>Multiple Linear Regression</strong>
+
+                        </div>
+
+
+                        <div class="model-item">
+
+                            <span>Data Coverage</span>
+
+                            <strong>44 Municipalities</strong>
+
+                        </div>
+
+
+                        <div class="model-item">
+
+                            <span>Basis</span>
+
+                            <strong>Comparable Sales</strong>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        <span>
+            <b>Model:</b>
+            Multiple Linear Regression
+        </span>
+
+        <span>
+            <b>Basis:</b>
+            Comparable Sales
+        </span>
+
+        <span>
+            <b>Coverage:</b>
+            44 King Country Municipalities
+        </span>
+
+    </footer>
+
+
+</body>
+
+</html>
